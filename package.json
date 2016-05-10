@@ -10,11 +10,11 @@
   "scripts": {
     "closure": "closure/closure-type-checking.js",
     "lint": "eslint .",
-    "test": "npm run lint --silent && npm run unit && npm run closure",
+    "test": "npm run lint --silent && npm run all-tests && npm run closure",
     "watch": "find . -name '*.js' | grep -v 'node_modules' | grep -v 'extension' | entr npm run unit",
-    "unit": "mocha $(find ./test -name '*.js') --timeout 60000",
+    "unit": "mocha ./test/fast-running-tests/**/*.js",
+    "all-tests": "mocha ./test/fast-running-tests/*.js ./test/long-running-tests/**/*.js",
     "chrome": "./scripts/launch-chrome.sh",
-    "smoke": "./scripts/run-smoke-tests.sh",
     "start": "node ./cli/index.js"
   },
   "repository": "googlechrome/lighthouse",

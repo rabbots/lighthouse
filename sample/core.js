@@ -17,11 +17,11 @@
 'use strict';
 
 const artifacts = require('./artifacts.json');
-const Core = require('../lighthouse/core');
+const Core = require('../core');
 const fs = require('fs');
 const audits = require('./configs/audits.json');
 
-Core.audit(artifacts, )
+Core.audit(artifacts, audits)
     .then(results => {
       fs.writeFile('./results.json', JSON.stringify(results, null, 2));
     }, err => {

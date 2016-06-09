@@ -25,6 +25,11 @@ class Core {
 
   static expandAudits(audits) {
     return audits.map(audit => {
+      // If this is already instantiated, don't do anything else.
+      if (typeof audit !== 'string') {
+        return audit;
+      }
+
       try {
         return require(`./audits/${audit}`);
       } catch (requireError) {

@@ -94,6 +94,6 @@ module.exports = function(driver, opts) {
  */
 module.exports.getAuditList = function() {
   return fs
-      .readdirSync(path.join(__dirname, './audits'))
+      .readdirSync(path.join(__dirname, './core/audits'))
       .filter(f => /\.js$/.test(f));
 };

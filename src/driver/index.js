@@ -202,6 +202,11 @@ class Driver {
   static instantiateGatherers(passes) {
     return passes.map(pass => {
       pass.gatherers = pass.gatherers.map(gatherer => {
+        // If this is already instantiated, don't do anything else.
+        if (typeof gatherer !== 'string') {
+          return gatherer;
+        }
+
         const GathererClass = require(`./gatherers/${gatherer}`);
         return new GathererClass();
       });

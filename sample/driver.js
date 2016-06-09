@@ -16,9 +16,9 @@
  */
 'use strict';
 
-const CRI = require('../lighthouse/driver/cri');
-const Driver = require('../lighthouse/driver');
-const AssetSaver = require('../lighthouse/driver/asset-saver');
+const CRI = require('../driver/cri');
+const Driver = require('../driver');
+const AssetSaver = require('../driver/asset-saver');
 const cri = new CRI();
 const passes = require('./configs/passes.json');
 

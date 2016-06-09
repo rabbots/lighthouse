@@ -16,7 +16,7 @@
  */
 'use strict';
 
-const Aggregator = require('../lighthouse/aggregator');
+const Aggregator = require('../aggregator');
 const results = require('./results.json');
 const aggregations = require('./configs/aggregations.json');
 

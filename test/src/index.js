@@ -31,7 +31,7 @@ describe('Module Tests', function() {
     });
 
     assert.throws(_ => {
-      require('../../src/index.js');
+      require('../..');
     });
 
     // Reset to the current version.
@@ -122,27 +122,6 @@ describe('Module Tests', function() {
       }, err => {
         assert.ok(err.message.includes('fluff'));
       });
-  });
-
-  it('should filter and expand audits', function() {
-    const lighthouse = require('../../src/lighthouse');
-    const audits = ['color-contrast', 'is-on-http'];
-    const whitelist = new Set(['color-contrast']);
-    const auditList = lighthouse.filterAndExpandAudits(audits, whitelist);
-
-    assert.equal(auditList.length, 1);
-  });
-
-  it('should throw if given an unknown gatherer', function() {
-    const lighthouse = require('../../src/lighthouse');
-    const audits = lighthouse.filterAndExpandAudits(
-      ['color-contrast', 'is-on-http'], new Set(['color-contrast']));
-
-    assert.throws(_ => lighthouse.expandPasses(audits, [{
-      gatherers: [
-        'fluff'
-      ]
-    }]));
   });
 
   it('should return a list of audits', function() {

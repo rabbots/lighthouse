@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +15,14 @@
  */
 'use strict';
 
-const lighthouse = require('../');
-const url = 'https://voice-memos.appspot.com/';
-const flags = {};
-const config = {
-  passes: require('./configs/passes.json'),
-  audits: require('./configs/audits.json'),
-  aggregations: require('./configs/aggregations.json')
-};
+/* eslint-env mocha */
 
-lighthouse(url, flags, config).then(aggregations => {
-  console.log(aggregations);
-}, err => console.log(err));
+const Gather = require('../../../../src/driver/gatherers/gather');
+const assert = require('assert');
+
+describe('Gather', () => {
+  it('returns its name', () => {
+    const g = new Gather();
+    return assert.equal(g.name, 'Gather');
+  });
+});

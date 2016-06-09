@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +15,18 @@
  */
 'use strict';
 
-const lighthouse = require('../');
-const url = 'https://voice-memos.appspot.com/';
-const flags = {};
-const config = {
-  passes: require('./configs/passes.json'),
-  audits: require('./configs/audits.json'),
-  aggregations: require('./configs/aggregations.json')
-};
+const Audit = require('../../../../src/core/audits/screenshots.js');
+const assert = require('assert');
 
-lighthouse(url, flags, config).then(aggregations => {
-  console.log(aggregations);
-}, err => console.log(err));
+/* eslint-env mocha */
+describe('Performance: screenshots audit', () => {
+  it('fails gracefully', () => {
+    const output = Audit.audit({});
+    assert.equal(output.value, -1);
+  });
+
+  it('processes an empty trace for screenshot data', () => {
+    const output = Audit.audit({ScreenshotFilmstrip: []});
+    assert.equal(output.value, 0);
+  });
+});

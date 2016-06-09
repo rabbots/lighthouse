@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+const Audit = require('../../../../src/core/audits/works-offline.js');
+const assert = require('assert');
 
-const lighthouse = require('../');
-const url = 'https://voice-memos.appspot.com/';
-const flags = {};
-const config = {
-  passes: require('./configs/passes.json'),
-  audits: require('./configs/audits.json'),
-  aggregations: require('./configs/aggregations.json')
-};
+/* global describe, it*/
 
-lighthouse(url, flags, config).then(aggregations => {
-  console.log(aggregations);
-}, err => console.log(err));
+describe('Offline: works-offline audit', () => {
+  it('fails gracefully', () => {
+    const output = Audit.audit({});
+
+    return assert.equal(output.value, false);
+  });
+
+  it('correctly audits a 200 code', () => {
+    const output = Audit.audit({Offline: 200});
+
+    return assert.equal(output.value, true);
+  });
+
+  it('correctly audits a non-200 code', () => {
+    const output = Audit.audit({Offline: 203});
+
+    return assert.equal(output.value, false);
+  });
+});

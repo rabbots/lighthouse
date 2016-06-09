@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+const Audit = require('../../../../src/core/audits/is-on-https.js');
+const assert = require('assert');
 
-const lighthouse = require('../');
-const url = 'https://voice-memos.appspot.com/';
-const flags = {};
-const config = {
-  passes: require('./configs/passes.json'),
-  audits: require('./configs/audits.json'),
-  aggregations: require('./configs/aggregations.json')
-};
+/* global describe, it*/
 
-lighthouse(url, flags, config).then(aggregations => {
-  console.log(aggregations);
-}, err => console.log(err));
+describe('Security: HTTPS audit', () => {
+  it('fails when no input present', () => {
+    return assert.equal(Audit.audit({}).value, false);
+  });
+
+  it('fails when not on HTTPS', () => {
+    return assert.equal(Audit.audit({
+      HTTPS: false
+    }).value, false);
+  });
+
+  it('passes when on HTTPS', () => {
+    return assert.equal(Audit.audit({
+      HTTPS: true
+    }).value, true);
+  });
+});

@@ -16,11 +16,4 @@
  */
 'use strict';
 
-class Auditor {
-
-  static audit(artifacts, audits) {
-    return Promise.all(audits.map(audit => audit.audit(artifacts)));
-  }
-}
-
-module.exports = Auditor;
+module.exports = require('../src/core');

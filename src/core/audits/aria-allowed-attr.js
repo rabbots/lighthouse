@@ -18,17 +18,17 @@
 'use strict';
 
 const Audit = require('./audit');
-const Formatter = require('../../formatters/formatter');
+const Formatter = require('../../../formatters/formatter');
 
-class ColorContrast extends Audit {
+class ARIAAllowedAttr extends Audit {
   /**
    * @return {!AuditMeta}
    */
   static get meta() {
     return {
       category: 'Accessibility',
-      name: 'color-contrast',
-      description: 'Background and foreground colors have a sufficient contrast ratio',
+      name: 'aria-allowed-attr',
+      description: 'Element aria-* roles are valid',
       requiredArtifacts: ['Accessibility']
     };
   }
@@ -39,9 +39,9 @@ class ColorContrast extends Audit {
    */
   static audit(artifacts) {
     const rule =
-        artifacts.Accessibility.violations.find(result => result.id === 'color-contrast');
+        artifacts.Accessibility.violations.find(result => result.id === 'aria-allowed-attr');
 
-    return ColorContrast.generateAuditResult({
+    return ARIAAllowedAttr.generateAuditResult({
       value: typeof rule === 'undefined',
       debugString: this.createDebugString(rule),
       extendedInfo: {
@@ -61,4 +61,4 @@ class ColorContrast extends Audit {
   }
 }
 
-module.exports = ColorContrast;
+module.exports = ARIAAllowedAttr;

@@ -18,18 +18,18 @@
 'use strict';
 
 const Audit = require('./audit');
-const Formatter = require('../../formatters/formatter');
+const icons = require('../../lib/icons');
 
-class ImageAlt extends Audit {
+class ManifestIconsMin192 extends Audit {
   /**
    * @return {!AuditMeta}
    */
   static get meta() {
     return {
-      category: 'Accessibility',
-      name: 'image-alt',
-      description: 'Every image element has an alt attribute',
-      requiredArtifacts: ['Accessibility']
+      category: 'Manifest',
+      name: 'manifest-icons-min-192',
+      description: 'Manifest contains icons at least 192px',
+      requiredArtifacts: ['Manifest']
     };
   }
 
@@ -38,27 +38,24 @@ class ImageAlt extends Audit {
    * @return {!AuditResult}
    */
   static audit(artifacts) {
-    const rule =
-        artifacts.Accessibility.violations.find(result => result.id === 'image-alt');
+    const manifest = artifacts.Manifest.value;
 
-    return ImageAlt.generateAuditResult({
-      value: typeof rule === 'undefined',
-      debugString: this.createDebugString(rule),
-      extendedInfo: {
-        formatter: Formatter.SUPPORTED_FORMATS.ACCESSIBILITY,
-        value: rule
-      }
-    });
-  }
-
-  static createDebugString(rule) {
-    if (typeof rule === 'undefined') {
-      return '';
+    if (icons.doExist(manifest) === false) {
+      return ManifestIconsMin192.generateAuditResult({
+        value: false,
+        debugString: 'WARNING: No icons found in the manifest'
+      });
     }
 
-    const elementsStr = rule.nodes.length === 1 ? 'element' : 'elements';
-    return `${rule.help} (Failed on ${rule.nodes.length} ${elementsStr})`;
+    const matchingIcons = icons.sizeAtLeast(192, /** @type {!Manifest} */ (manifest));
+
+    const foundSizesDebug = matchingIcons.length ?
+        `Found icons of sizes: ${matchingIcons}` : undefined;
+    return ManifestIconsMin192.generateAuditResult({
+      value: !!matchingIcons.length,
+      debugString: foundSizesDebug
+    });
   }
 }
 
-module.exports = ImageAlt;
+module.exports = ManifestIconsMin192;

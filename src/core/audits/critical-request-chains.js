@@ -18,7 +18,7 @@
 'use strict';
 
 const Audit = require('./audit');
-const Formatter = require('../../formatters/formatter');
+const Formatter = require('../../../formatters/formatter');
 
 class CriticalRequestChains extends Audit {
   /**

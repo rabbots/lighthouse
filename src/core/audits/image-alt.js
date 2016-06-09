@@ -18,17 +18,17 @@
 'use strict';
 
 const Audit = require('./audit');
-const Formatter = require('../../formatters/formatter');
+const Formatter = require('../../../formatters/formatter');
 
-class ARIAAllowedAttr extends Audit {
+class ImageAlt extends Audit {
   /**
    * @return {!AuditMeta}
    */
   static get meta() {
     return {
       category: 'Accessibility',
-      name: 'aria-allowed-attr',
-      description: 'Element aria-* roles are valid',
+      name: 'image-alt',
+      description: 'Every image element has an alt attribute',
       requiredArtifacts: ['Accessibility']
     };
   }
@@ -39,9 +39,9 @@ class ARIAAllowedAttr extends Audit {
    */
   static audit(artifacts) {
     const rule =
-        artifacts.Accessibility.violations.find(result => result.id === 'aria-allowed-attr');
+        artifacts.Accessibility.violations.find(result => result.id === 'image-alt');
 
-    return ARIAAllowedAttr.generateAuditResult({
+    return ImageAlt.generateAuditResult({
       value: typeof rule === 'undefined',
       debugString: this.createDebugString(rule),
       extendedInfo: {
@@ -61,4 +61,4 @@ class ARIAAllowedAttr extends Audit {
   }
 }
 
-module.exports = ARIAAllowedAttr;
+module.exports = ImageAlt;

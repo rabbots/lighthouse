@@ -17,7 +17,7 @@
 
 'use strict';
 
-const Aggregate = require('./aggregators/aggregate');
+const Aggregate = require('./aggregate');
 
 class Aggregator {
   static aggregate(aggregations, results) {

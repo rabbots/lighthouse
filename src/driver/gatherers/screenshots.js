@@ -18,7 +18,7 @@
 'use strict';
 
 const Gather = require('./gather');
-const DevtoolsTimelineModel = require('../lib/traces/devtools-timeline-model');
+const DevtoolsTimelineModel = require('../../lib/traces/devtools-timeline-model');
 
 class ScreenshotFilmstrip extends Gather {
 

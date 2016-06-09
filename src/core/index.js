@@ -18,26 +18,29 @@
 
 class Core {
   static audit(artifacts, audits) {
+    audits = this.expandAudits(audits);
+
     return Promise.all(audits.map(audit => audit.audit(artifacts)));
   }
 
-  static filterAndExpandAudits(audits, whitelist) {
-    return audits.filter(a => {
-          // If there is no whitelist, assume all.
-      if (!whitelist) {
-        return true;
-      }
-
-      return whitelist.has(a.toLowerCase());
-    })
-
-    // Remap the audits to its actual class.
-    .map(audit => {
+  static expandAudits(audits) {
+    return audits.map(audit => {
       try {
         return require(`./audits/${audit}`);
       } catch (requireError) {
         throw new Error(`Unable to locate audit: ${audit}`);
       }
+    });
+  }
+
+  static filterAudits(audits, whitelist) {
+    return audits.filter(a => {
+      // If there is no whitelist, assume all.
+      if (!whitelist) {
+        return true;
+      }
+
+      return whitelist.has(a.toLowerCase());
     });
   }
 }

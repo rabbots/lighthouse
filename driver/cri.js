@@ -16,26 +16,4 @@
  */
 'use strict';
 
-const Gather = require('./gather');
-
-class Viewport extends Gather {
-
-  /**
-   * @param {!{driver: !Object}} options Run options
-   * @return {!Promise<?string>} The value of the viewport meta's content attribute, or null
-   */
-  afterPass(options) {
-    const driver = options.driver;
-
-    return driver.querySelector('head meta[name="viewport"]')
-      .then(node => node && node.getAttribute('content'))
-      .then(viewport => {
-        this.artifact = viewport;
-      })
-      .catch(_ => {
-        this.artifact = -1;
-      });
-  }
-}
-
-module.exports = Viewport;
+module.exports = require('../src/lib/drivers/cri.js');

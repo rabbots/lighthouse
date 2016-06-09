@@ -28,24 +28,43 @@ function isValidConfig(config) {
       typeof config.audits !== 'undefined');
 }
 
+function getGatherersNeededByAudits(audits) {
+  audits = Core.expandAudits(audits);
+
+  return audits.reduce((list, audit) => {
+    audit.meta.requiredArtifacts.forEach(artifact => list.add(artifact));
+    return list;
+  }, new Set());
+}
+
 module.exports = function(driver, opts) {
-  // Default mobile emulation and page loading to true.
-  // The extension will switch these off initially.
-  if (typeof opts.flags.mobile === 'undefined') {
-    opts.flags.mobile = true;
-  }
-
-  if (typeof opts.flags.loadPage === 'undefined') {
-    opts.flags.loadPage = true;
-  }
-
   const config = opts.config;
   if (!isValidConfig(config)) {
     throw new Error('Config is invalid. Did you define passes, audits, and aggregations?');
   }
 
-  const audits = Core.filterAndExpandAudits(config.audits, opts.flags.auditWhitelist);
-  const passes = Driver.expandPasses(audits, config.passes);
+  const passes = config.passes;
+  const audits = config.audits;
+  const requiredGatherers = getGatherersNeededByAudits(audits);
+
+  // Make sure we only have the gatherers that are needed by the audits
+  // that have been listed in the config.
+  passes.map(pass => {
+    pass.gatherers.filter(gatherer => {
+      try {
+        const GathererClass = require(`./driver/gatherers/${gatherer}`);
+        const gathererNecessary = requiredGatherers.has(GathererClass.name);
+        return gathererNecessary;
+      } catch (requireError) {
+        throw new Error(`Unable to locate gatherer: ${gatherer}`);
+      }
+    });
+
+    return pass;
+  })
+
+  // Now remove any passes which no longer have gatherers.
+  .filter(p => p.gatherers.length > 0);
 
   // The runs of Lighthouse should be tested in integration / smoke tests, so testing for coverage
   // here, at least from a unit test POV, is relatively low merit.

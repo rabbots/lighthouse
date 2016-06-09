@@ -133,8 +133,24 @@ class Driver {
     const tracingData = {};
 
     if (typeof options.url !== 'string' || options.url.length === 0) {
-      return Promise.reject(new Error('You must provide a url to scheduler'));
+      return Promise.reject(new Error('You must provide a url to the driver'));
     }
+
+    if (typeof options.flags === 'undefined') {
+      options.flags = {};
+    }
+
+    // Default mobile emulation and page loading to true.
+    // The extension will switch these off initially.
+    if (typeof options.flags.mobile === 'undefined') {
+      options.flags.mobile = true;
+    }
+
+    if (typeof options.flags.loadPage === 'undefined') {
+      options.flags.loadPage = true;
+    }
+
+    passes = this.instantiateGatherers(passes);
 
     return driver.connect()
       .then(_ => this.setupDriver(driver, 1, options))
@@ -183,43 +199,16 @@ class Driver {
       });
   }
 
-  static getGatherersNeededByAudits(audits) {
-    return audits.reduce((list, audit) => {
-      audit.meta.requiredArtifacts.forEach(artifact => list.add(artifact));
-      return list;
-    }, new Set());
-  }
-
-  static expandPasses(audits, passes) {
-    const requiredGatherers = this.getGatherersNeededByAudits(audits);
-
+  static instantiateGatherers(passes) {
     return passes.map(pass => {
-      pass.gatherers = pass.gatherers
-          // Make sure we only have the gatherers that are needed by the audits
-          // that have been listed in the config.
-          .filter(gatherer => {
-            try {
-              const GathererClass = require(`./gatherers/${gatherer}`);
-              const gathererNecessary = requiredGatherers.has(GathererClass.name);
-              return gathererNecessary;
-            } catch (requireError) {
-              throw new Error(`Unable to locate gatherer: ${gatherer}`);
-            }
-          })
-
-          // Take each one and instantiate it.
-          .map(gatherer => {
-            const GathererClass = require(`./gatherers/${gatherer}`);
-            return new GathererClass();
-          });
+      pass.gatherers = pass.gatherers.map(gatherer => {
+        const GathererClass = require(`./gatherers/${gatherer}`);
+        return new GathererClass();
+      });
 
       return pass;
-    })
-
-    // Make sure that any passes that have zero gatherers left are excluded from the run.
-    .filter(p => p.gatherers.length > 0);
+    });
   }
-
 }
 
 module.exports = Driver;

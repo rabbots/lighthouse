@@ -1,0 +1,32 @@
+[{
+  "network": true,
+  "trace": true,
+  "loadDataName": "first-pass",
+  "loadPage": true,
+  "gatherers": [
+    "url",
+    "https",
+    "viewport",
+    "theme-color",
+    "html",
+    "manifest",
+    "accessibility",
+    "screenshots",
+    "critical-request-chains",
+    "speedline"
+  ]
+},
+{
+  "loadPage": true,
+  "gatherers": [
+    "service-worker",
+    "offline"
+  ]
+},
+{
+  "loadPage": true,
+  "gatherers": [
+    "http-redirect",
+    "html-without-javascript"
+  ]
+}]

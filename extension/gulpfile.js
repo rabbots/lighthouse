@@ -111,13 +111,13 @@ gulp.task('browserify', () => {
       const srcPath = /\.\.\/src\//;
 
       // Expose the audits and gatherers so they can be dynamically loaded.
-      bundle = audits.reduce((bundle, audit) => {
-        return bundle.require(audit, {expose: audit.replace(srcPath, './')});
-      }, bundle);
+      audits.forEach(audit => {
+        bundle = bundle.require(audit, {expose: audit.replace(srcPath, './')});
+      });
 
-      bundle = gatherers.reduce((bundle, gatherer) => {
-        return bundle.require(gatherer, {expose: gatherer.replace(srcPath, './')});
-      }, bundle);
+      gatherers.forEach(gatherer => {
+        bundle = bundle.require(gatherer, {expose: gatherer.replace(srcPath, './')});
+      });
 
       file.contents = bundle.bundle();
     }))

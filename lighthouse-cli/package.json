@@ -15,7 +15,8 @@
   "scripts": {
     "test": "npm run lint --silent && npm run unit",
     "unit": "mocha $(find ./test -name '*.js') --timeout 60000",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "smoke": "./scripts/run-smoke-tests.sh"
   },
   "author": "The Chromium Authors",
   "license": "Apache-2.0",
@@ -26,6 +27,6 @@
   "dependencies": {
     "meow": "^3.7.0",
     "mocha": "^2.3.3",
-    "lighthouse-core": "lighthouse-core"
+    "lighthouse-core": "file:../lighthouse-core"
   }
 }

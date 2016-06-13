@@ -1,7 +1,7 @@
 {
   "name": "lighthouse-core",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lighthouse core",
   "main": "./module/index.js",
   "engines": {
     "node": ">=5"

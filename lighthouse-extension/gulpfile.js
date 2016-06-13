@@ -43,7 +43,7 @@ gulp.task('extras', () => {
 
 gulp.task('copyReportScripts', () => {
   return gulp.src([
-    '../report/scripts/lighthouse-report.js'
+    '../lighthouse-core/report/scripts/lighthouse-report.js'
   ])
   .pipe(rename('pages/scripts/lighthouse-report.js'))
   .pipe(gulp.dest('app'))

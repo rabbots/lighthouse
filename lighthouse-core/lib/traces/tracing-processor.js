@@ -43,7 +43,7 @@ global.HTMLImportsLoader.hrefToAbsolutePath = function(path) {
   }
 };
 
-require('../../../third_party/traceviewer-js/');
+require('../../third_party/traceviewer-js/');
 const traceviewer = global.tr;
 
 class TraceProcessor {

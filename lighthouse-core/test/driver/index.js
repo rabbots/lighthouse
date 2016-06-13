@@ -19,7 +19,6 @@
 /* eslint-env mocha */
 
 const Gather = require('../../driver/gatherers/gather');
-const assetSaver = require('../lib/asset-saver');
 const Driver = require('../../driver');
 const assert = require('assert');
 
@@ -35,23 +34,6 @@ class TestGatherer extends Gather {
 
   setup() {
     this.called = true;
-  }
-}
-
-class TestScreenshotGatherer extends Gather {
-  constructor() {
-    super();
-    this.afterPassCalled = false;
-  }
-
-  get name() {
-    return 'screenshots';
-  }
-
-  afterPass() {
-    this.afterPassCalled = true;
-    const screenshots = require('../fixtures/traces/screenshots.json');
-    this.artifact = screenshots;
   }
 }
 

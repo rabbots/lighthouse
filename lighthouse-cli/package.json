@@ -1,0 +1,31 @@
+{
+  "name": "lighthouse-cli",
+  "version": "1.0.0",
+  "description": "Lighthouse CLI",
+  "bin": "./index.js",
+  "engines": {
+    "node": ">=5"
+  },
+  "repository": "googlechrome/lighthouse",
+  "keywords": [
+    "google",
+    "chrome",
+    "devtools"
+  ],
+  "scripts": {
+    "test": "npm run lint --silent && npm run unit",
+    "unit": "mocha $(find ./test -name '*.js') --timeout 60000",
+    "lint": "eslint ."
+  },
+  "author": "The Chromium Authors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/googlechrome/lighthouse/issues"
+  },
+  "homepage": "https://github.com/googlechrome/lighthouse#readme",
+  "dependencies": {
+    "meow": "^3.7.0",
+    "mocha": "^2.3.3",
+    "lighthouse-core": "file:///Users/paullewis/Projects/lighthouse/lighthouse-core"
+  }
+}

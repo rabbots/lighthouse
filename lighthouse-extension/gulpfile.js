@@ -16,13 +16,13 @@ const tap = require('gulp-tap');
 const zip = require('gulp-zip');
 const rename = require('gulp-rename');
 
-const audits = fs.readdirSync(path.join(__dirname, '../', 'src/audits/'))
+const audits = fs.readdirSync(path.join(__dirname, '../', 'lighthouse-core/audits/'))
     .filter(f => /\.js$/.test(f))
-    .map(f => `../src/audits/${f.replace(/\.js$/, '')}`);
+    .map(f => `../lighthouse-core/audits/${f.replace(/\.js$/, '')}`);
 
-const gatherers = fs.readdirSync(path.join(__dirname, '../', 'src/gatherers/'))
+const gatherers = fs.readdirSync(path.join(__dirname, '../', 'lighthouse-core/driver/gatherers/'))
     .filter(f => /\.js$/.test(f))
-    .map(f => `../src/gatherers/${f.replace(/\.js$/, '')}`);
+    .map(f => `../lighthouse-core/driver/gatherers/${f.replace(/\.js$/, '')}`);
 
 gulp.task('extras', () => {
   return gulp.src([
@@ -97,9 +97,18 @@ gulp.task('browserify', () => {
     'app/src/report-loader.js'
   ], {read: false})
     .pipe(tap(file => {
-      let bundle = browserify(file.path, {
-        transform: ['brfs'],
+      let bundle = browserify(file.path)
+
+      // Fix an issue with Babelified code that doesn't brfs well.
+      .transform('./fs-transform', {
+        global: true
       })
+
+      // Transform the fs.readFile etc, but do so in all the modules.
+      .transform('brfs', {
+        global: true
+      })
+
       // Do the additional transform to convert references to devtools-timeline-model
       // to the modified version internal to Lighthouse.
       .transform('./dtm-transform.js', {
@@ -108,15 +117,16 @@ gulp.task('browserify', () => {
       .ignore('npmlog')
       .ignore('chrome-remote-interface');
 
-      const srcPath = /\.\.\/src\//;
+      const corePath = /\.\.\/lighthouse-core\//;
+      const driverPath = /\.\.\/lighthouse-core\/driver\//;
 
       // Expose the audits and gatherers so they can be dynamically loaded.
       audits.forEach(audit => {
-        bundle = bundle.require(audit, {expose: audit.replace(srcPath, './')});
+        bundle = bundle.require(audit, {expose: audit.replace(corePath, './')});
       });
 
       gatherers.forEach(gatherer => {
-        bundle = bundle.require(gatherer, {expose: gatherer.replace(srcPath, './')});
+        bundle = bundle.require(gatherer, {expose: gatherer.replace(driverPath, './')});
       });
 
       file.contents = bundle.bundle();

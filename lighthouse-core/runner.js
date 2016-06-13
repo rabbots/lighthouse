@@ -50,7 +50,7 @@ class Runner {
       config.passes = config.passes.map(pass => {
         pass.gatherers.filter(gatherer => {
           try {
-            const GathererClass = require(`./driver/gatherers/${gatherer}`);
+            const GathererClass = Driver.getGathererClass(gatherer);
             const gathererNecessary = requiredGatherers.has(GathererClass.name);
             return gathererNecessary;
           } catch (requireError) {

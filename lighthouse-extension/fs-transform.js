@@ -21,9 +21,9 @@ const through = require('through2');
 const path = require('path');
 
 /**
- * This is a browserify transform that looks for requires to devtools-timeline-model
- * and replaces them for the local version in Lighthouse. This is just for the extension
- * since by default it doesn't browserify properly.
+ * This is a browserify transform that looks for requires to _interopRequireDefault(_fs)
+ * and replaces them with require('fs'). This applies mainly to speedline, because of the
+ * Babel transform that been through.
  */
 module.exports = function() {
   const fileContents = [];
@@ -32,12 +32,16 @@ module.exports = function() {
     next();
   }, function(done) {
     let fileContentsString = fileContents.join('');
-    const dtmRegExp = /require\(['"]devtools-timeline-model['"]\)/gim;
-    const newPath = path.join(__dirname, '../',
-        'lighthouse-core/lib/traces/devtools-timeline-model');
+    const fsRegExp = /_interopRequireDefault\(_fs\)/gim;
+    const fsTimelineRegExp = /_fs2\.default\.readFileSync\(timeline, 'utf-8'\)/gim;
+    const newPath = 'fs';
 
-    if (dtmRegExp.test(fileContentsString)) {
-      fileContentsString = fileContentsString.replace(dtmRegExp, `require("${newPath}")`);
+    if (fsRegExp.test(fileContentsString)) {
+      fileContentsString = fileContentsString.replace(fsRegExp, `require("${newPath}")`);
+    }
+
+    if (fsTimelineRegExp.test(fileContentsString)) {
+      fileContentsString = fileContentsString.replace(fsTimelineRegExp, 'timeline');
     }
 
     this.push(fileContentsString);

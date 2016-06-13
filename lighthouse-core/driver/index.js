@@ -187,6 +187,10 @@ class Driver {
       });
   }
 
+  static getGathererClass(gatherer) {
+    return require(`./gatherers/${gatherer}`);
+  }
+
   static instantiateGatherers(passes) {
     return passes.map(pass => {
       pass.gatherers = pass.gatherers.map(gatherer => {

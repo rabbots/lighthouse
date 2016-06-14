@@ -28,7 +28,6 @@
     "mocha": "^2.3.3"
   },
   "dependencies": {
-    "meow": "^3.7.0",
-    "lighthouse-core": "file:../lighthouse-core"
+    "meow": "^3.7.0"
   }
 }

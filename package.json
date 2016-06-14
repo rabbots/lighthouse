@@ -1,0 +1,28 @@
+{
+  "name": "lighthouse",
+  "version": "1.0.0",
+  "description": "Lighthouse",
+  "main": "./lighthouse-core/module/index.js",
+  "bin": "./lighthouse-cli/index.js",
+  "engines": {
+    "node": ">=5"
+  },
+  "scripts": {
+    "install": "npm run core && npm run cli && npm run extension",
+    "extension": "npm --prefix ./lighthouse-extension install ./lighthouse-extension",
+    "core": "npm --prefix ./lighthouse-core install ./lighthouse-core",
+    "cli": "npm --prefix ./lighthouse-cli install ./lighthouse-cli"
+  },
+  "repository": "googlechrome/lighthouse",
+  "keywords": [
+    "google",
+    "chrome",
+    "devtools"
+  ],
+  "author": "The Chromium Authors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/googlechrome/lighthouse/issues"
+  },
+  "homepage": "https://github.com/googlechrome/lighthouse#readme"
+}

@@ -19,8 +19,6 @@ const HTTPSGatherer = require('../driver/gatherers/https');
 const fakeDriver = require('./driver/fake-driver');
 const assert = require('assert');
 
-'use strict';
-
 /* global describe, it*/
 
 describe('Runner', () => {
@@ -54,6 +52,8 @@ describe('Runner', () => {
   });
 
   it('ignores expanded gatherers', () => {
+    'use strict';
+
     const url = 'https://example.com';
     const flags = {
       auditWhitelist: null

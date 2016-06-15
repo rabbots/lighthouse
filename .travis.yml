@@ -22,7 +22,7 @@ script:
   - npm run closure
   - npm run coveralls
   - npm run smoke
-  - cd ../lighthouse-extension
+  - cd lighthouse-extension
   - gulp build
   - cd ../lighthouse-cli
   - npm run unit

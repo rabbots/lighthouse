@@ -55,12 +55,6 @@ class Runner {
         typeof config.artifacts !== 'undefined' &&
         typeof config.audits !== 'undefined');
 
-    // And we need either of those _or_ existing audit results.
-    if (!(validPassesAndAudits || validArtifactsAndAudits || config.auditResults)) {
-      throw new Error(
-          'The config must provide passes and audits, artifacts and audits, or auditResults');
-    }
-
     // Make a run, which can be .then()'d with whatever needs to run (based on the config).
     let run = Promise.resolve();
 
@@ -116,10 +110,13 @@ class Runner {
       }
 
       // Now run the audits.
-      run.then(artifacts => Core.audit(artifacts, config.audits));
+      run = run.then(artifacts => Core.audit(artifacts, config.audits));
     } else if (config.auditResults) {
       // If there are existing audit results, surface those here.
       run = run.then(_ => config.auditResults);
+    } else {
+      throw new Error(
+          'The config must provide passes and audits, artifacts and audits, or auditResults');
     }
 
     // Only run aggregations if needed.

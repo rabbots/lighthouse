@@ -19,6 +19,8 @@ const HTTPSGatherer = require('../driver/gatherers/https');
 const fakeDriver = require('./driver/fake-driver');
 const assert = require('assert');
 
+'use strict';
+
 /* global describe, it*/
 
 describe('Runner', () => {

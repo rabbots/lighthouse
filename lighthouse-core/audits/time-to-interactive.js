@@ -52,7 +52,7 @@ class TTIMetric extends Audit {
    */
   static audit(artifacts) {
     // Max(FMPMetric, DCLEnded, visProgress[0.85]) is where we begin looking
-    FMPMetric.audit(artifacts).then(fmpResult => {
+    return FMPMetric.audit(artifacts).then(fmpResult => {
       const fmpTiming = fmpResult.rawValue;
       const timings = fmpResult.extendedInfo.timings;
 

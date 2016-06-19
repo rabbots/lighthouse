@@ -18,24 +18,27 @@
 'use strict';
 
 const Gather = require('./gather');
+const WebInspector = require('../../lib/web-inspector');
 
 const includes = (arr, elm) => arr.indexOf(elm) > -1;
 
 class CriticalRequestChains extends Gather {
 
-  /** @return {String} */
-  get criticalPriorities() {
-    // For now, critical request == render blocking request (as decided by
-    // blink). Blink treats requests with the following priority levels as
-    // render blocking.
-    // See https://docs.google.com/document/d/1bCDuq9H1ih9iNjgzyAL0gpwNFiEP4TZS-YLRp_RuMlc
-    return ['VeryHigh', 'High', 'Medium'];
-  }
-
+  /**
+   * For now, we use network priorities as a proxy for "render-blocking"/critical-ness.
+   * It's imperfect, but there is not a higher-fidelity signal available yet.
+   * @see https://docs.google.com/document/d/1bCDuq9H1ih9iNjgzyAL0gpwNFiEP4TZS-YLRp_RuMlc
+   * @param  {any} request
+   */
   isCritical(request) {
-    // TODO(deepanjanroy): When possible, chanage
-    // initialPriority -> CurrentPriority
-    return includes(this.criticalPriorities, request.initialPriority());
+    // XHRs are fetched at High priority, but we exclude them, as they are unlikely to be critical
+    const resourceTypeCategory = request._resourceType && request._resourceType._category;
+    if (resourceTypeCategory === WebInspector.resourceTypes.XHR._category) {
+      return false;
+    }
+    // TODO(deepanjanroy): When devtools-frontend module is updated,
+    // change `initialPriority -> CurrentPriority`
+    return includes(['VeryHigh', 'High', 'Medium'], request.initialPriority());
   }
 
   static _fixRedirectPriorities(requestIdToRequests) {
@@ -74,7 +77,8 @@ class CriticalRequestChains extends Gather {
         url: request._url,
         startTime: request.startTime,
         endTime: request.endTime,
-        responseReceivedTime: request.responseReceivedTime
+        responseReceivedTime: request.responseReceivedTime,
+        transferSize: request.transferSize
       };
     };
 

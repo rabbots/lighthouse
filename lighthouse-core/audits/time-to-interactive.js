@@ -21,7 +21,7 @@ class TTIMetric extends Audit {
       category: 'Performance',
       name: 'time-to-interactive',
       description: 'Time To Interactive',
-      optimalValue: '<50ms at the 90% percentile',
+      optimalValue: 'TBD', // dunno what the scoring curve is yet...
       requiredArtifacts: ['traceContents', 'speedline']
     };
   }
@@ -51,7 +51,6 @@ class TTIMetric extends Audit {
    * @return {!AuditResult} The score from the audit, ranging from 0-100.
    */
   static audit(artifacts) {
-
     // Max(FMPMetric, DCLEnded, visProgress[0.85]) is where we begin looking
     FMPMetric.audit(artifacts).then(fmpResult => {
       const fmpTiming = fmpResult.rawValue;
@@ -92,8 +91,8 @@ class TTIMetric extends Audit {
         startTime += 50;
         endTime = startTime + 500;
         // If there's no more room in the trace to look, we're done.
+        // TODO return an error instead
         if (endTime > endOfTraceTime) {
-          // TODO return an error instead
           return;
         }
         // Get our expected latency for the time window

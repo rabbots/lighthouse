@@ -8,15 +8,11 @@
   },
   "scripts": {
     "closure": "closure/closure-type-checking.js",
-    "lint": "eslint .",
+    "lint": "eslint  --ignore-path ../.eslintignore .",
     "test": "npm run lint --silent && npm run unit && npm run closure",
     "watch": "find . -name '*.js' -not -path '*/node_modules/*' -not -path '*/extension/*' | entr npm run unit",
     "unit": "mocha $(find ./test -name '*.js') --timeout 60000",
-    "coverage": "istanbul cover -x \"**/third_party/**\" _mocha -- $(find ./test -name '*.js') --timeout 60000",
-    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
-    "chrome": "./scripts/launch-chrome.sh",
-    "smoke": "./scripts/run-smoke-tests.sh",
-    "start": "node ./cli/index.js"
+    "chrome": "./scripts/launch-chrome.sh"
   },
   "repository": "googlechrome/lighthouse",
   "keywords": [
@@ -34,14 +30,14 @@
     "axe-core": "^1.1.1",
     "chrome-devtools-frontend": "1.0.381789",
     "chrome-remote-interface": "^0.11.0",
-    "devtools-timeline-model": "1.0.19",
+    "devtools-timeline-model": "1.1.4",
     "empty-module": "0.0.2",
     "gl-matrix": "2.3.2",
     "handlebars": "^4.0.5",
     "json-stringify-safe": "^5.0.1",
     "jszip": "2.6.0",
     "npmlog": "^2.0.3",
-    "semver": "^5.1.0",
+    "semver": ">=4.3.3",
     "speedline": "^0.1.2"
   },
   "devDependencies": {

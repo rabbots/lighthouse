@@ -30,13 +30,6 @@ class EstimatedInputLatencyFormatter extends Formatter {
             return '';
           }
 
-<<<<<<< HEAD
-          const output = percentiles.reduce((output, result) => {
-            const percentile = Math.round(result.percentile * 100);
-            const value = result.time.toFixed(1);
-            return output + `    - ${percentile}%: ${value}ms\n`;
-          }, '');
-=======
           const ninetieth = percentiles.find(result => result.percentile === 0.9);
           const time = ninetieth.time.toFixed(1);
           const allResults = percentiles.map(result => {
@@ -47,7 +40,6 @@ class EstimatedInputLatencyFormatter extends Formatter {
 
           const output = `    - 90% probability of input latency at ${time}ms or shorter.\n` +
               `      (${allResults})\n`;
->>>>>>> GoogleChrome-brendankenny-response
 
           return output;
         };
@@ -63,8 +55,6 @@ class EstimatedInputLatencyFormatter extends Formatter {
 
   static getHelpers() {
     return {
-<<<<<<< HEAD
-=======
       ninetiethTime(percentiles) {
         if (!Array.isArray(percentiles)) {
           return;
@@ -73,7 +63,6 @@ class EstimatedInputLatencyFormatter extends Formatter {
         const ninetieth = percentiles.find(result => result.percentile === 0.9);
         return ninetieth.time.toFixed(1);
       },
->>>>>>> GoogleChrome-brendankenny-response
       percentile(value) {
         return Math.round(value * 100);
       },

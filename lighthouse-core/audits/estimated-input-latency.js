@@ -47,11 +47,7 @@ class EstimatedInputLatency extends Audit {
    */
   static audit(artifacts) {
     try {
-<<<<<<< HEAD
-      // Use speedline's first paint as start of range for input readiness check.
-=======
       // Use speedline's first paint as start of range for input latency check.
->>>>>>> master
       const startTime = artifacts.Speedline.first;
 
       const trace = artifacts.traceContents;

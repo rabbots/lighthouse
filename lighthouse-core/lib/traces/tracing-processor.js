@@ -161,11 +161,7 @@ class TraceProcessor {
       // Negative results are within idle time (0ms wait by definition), so clamp at zero.
       results.push({
         percentile,
-<<<<<<< HEAD
-        time: Math.max(0, (percentileTime - completedTime) / remainingCount)
-=======
         time: Math.max(0, (percentileTime - completedTime) / remainingCount) + BASE_RESPONSE_LATENCY
->>>>>>> master
       });
     }
 
@@ -175,14 +171,6 @@ class TraceProcessor {
   /**
    * Calculates the maximum queueing time (in ms) of high priority tasks for
    * selected percentiles within a window of the main thread.
-<<<<<<< HEAD
-   * @param {!Array<!Object>} trace
-   * @param {number=} startTime Optional start time (in ms) of range of interest. Defaults to trace start.
-   * @param {number=} endTime Optional end time (in ms) of range of interest. Defaults to trace end.
-   * @return {!Array<{percentile: number, time: number}>}
-   */
-  static getRiskToResponsiveness(model, trace, startTime, endTime) {
-=======
    * @param {!traceviewer.Model} model
    * @param {!Array<!Object>} trace
    * @param {number=} startTime Optional start time (in ms) of range of interest. Defaults to trace start.
@@ -191,17 +179,12 @@ class TraceProcessor {
    * @return {!Array<{percentile: number, time: number}>}
    */
   static getRiskToResponsiveness(model, trace, startTime, endTime, percentiles) {
->>>>>>> master
     // Range of responsiveness we care about. Default to bounds of model.
     startTime = startTime === undefined ? model.bounds.min : startTime;
     endTime = endTime === undefined ? model.bounds.max : endTime;
     const totalTime = endTime - startTime;
-
-<<<<<<< HEAD
-=======
     percentiles = percentiles || [0.5, 0.75, 0.9, 0.99, 1];
 
->>>>>>> master
     // Find the main thread.
     const startEvent = trace.find(event => {
       return event.name === 'TracingStartedInPage';
@@ -221,11 +204,7 @@ class TraceProcessor {
     });
     durations.sort((a, b) => a - b);
 
-<<<<<<< HEAD
-    const percentiles = [0.5, 0.75, 0.9, 0.99, 1];
-=======
     // Actual calculation of percentiles done in _riskPercentiles.
->>>>>>> master
     return TraceProcessor._riskPercentiles(durations, totalTime, percentiles);
   }
 

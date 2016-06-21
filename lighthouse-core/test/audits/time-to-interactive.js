@@ -19,13 +19,13 @@ const Audit = require('../../audits/time-to-interactive.js');
 const SpeedlineGather = require('../../driver/gatherers/speedline');
 const assert = require('assert');
 
-const traceContents = require('../../selio-tti.json');
+const traceContents = require('../fixtures/traces/progressive-app.json');
 const speedlineGather = new SpeedlineGather();
 
 /* eslint-env mocha */
 describe('Performance: time-to-interactive audit', () => {
   it('scores a -1 with invalid trace data', () => {
-    Audit.audit({
+    return Audit.audit({
       traceContents: '[{"pid": 15256,"tid": 1295,"t',
       Speedline: {
         first: 500
@@ -40,16 +40,16 @@ describe('Performance: time-to-interactive audit', () => {
     let artifacts = {
       traceContents: traceContents
     };
-    speedlineGather.afterPass({}, artifacts).then(_ => {
+    return speedlineGather.afterPass({}, artifacts).then(_ => {
       artifacts.Speedline = speedlineGather.artifact;
       Audit.audit(artifacts).then(output => {
-        assert.equal(output.rawValue, '4604.74');
-        assert.equal(output.value, '4604.74');
+        assert.equal(output.rawValue, '1105.80');
+        assert.equal(output.value, '1105.80');
 
-        assert.equal(output.extendedInfo.expectedLatencyAtTTI, '32.17');
-        assert.equal(output.extendedInfo.timings.fMP, '3246.84');
-        assert.equal(output.extendedInfo.timings.mainThreadAvail, '4604.74');
-        assert.equal(output.extendedInfo.timings.visuallyReady, '3604.74');
+        assert.equal(output.extendedInfo.expectedLatencyAtTTI, '21.67');
+        assert.equal(output.extendedInfo.timings.fMP, '1099.52');
+        assert.equal(output.extendedInfo.timings.mainThreadAvail, '1105.80');
+        assert.equal(output.extendedInfo.timings.visuallyReady, '1105.80');
       });
     });
   });

@@ -51,18 +51,21 @@ class TTIMetric extends Audit {
    * @return {!AuditResult} The score from the audit, ranging from 0-100.
    */
   static audit(artifacts) {
-    // Max(FMPMetric, DCLEnded, visProgress[0.85]) is where we begin looking
+    // We start looking at Math.Max(FMPMetric, visProgress[0.85])
     return FMPMetric.audit(artifacts).then(fmpResult => {
+      if (fmpResult.value === -1) {
+        return generateError(fmpResult.debugString);
+      }
       const fmpTiming = fmpResult.rawValue;
       const timings = fmpResult.extendedInfo.timings;
 
-      // process the trace
+      // Process the trace
       const tracingProcessor = new TracingProcessor();
       const model = tracingProcessor.init(artifacts.traceContents);
       const endOfTraceTime = model.bounds.max;
 
-      // todo DCLEnded
-      // TODO: Consider UA loading indicator
+      // TODO: Wait for DOMContentLoadedEndEvent
+      // TODO: Wait for UA loading indicator to be done
 
       // look at speedline results for 85% starting at FMP
       const visualProgress = artifacts.Speedline.frames.map(frame => {
@@ -97,33 +100,48 @@ class TTIMetric extends Audit {
         }
         // Get our expected latency for the time window
         const latencies = TracingProcessor.getRiskToResponsiveness(
-          model, artifacts.traceContents, startTime, endTime);
-        const estLatency = latencies.find(res => res.percentile === percentile);
-        foundLatencies.push(Object.assign({}, estLatency, {startTime}));
-        console.log('At', startTime, '90 percentile est latency is ~', estLatency.time);
+          model, artifacts.traceContents, startTime, endTime, [percentile]);
+        const estLatency = latencies[0].time.toFixed(2);
+        foundLatencies.push(Object.assign({}, {
+          startTime: startTime.toFixed(2),
+          estLatency
+        }));
+        // console.log('At', startTime.toFixed(2), '90 percentile est latency is ~', estLatency);
         // Grab this latency and try the threshold again
-        currentLatency = estLatency.time;
+        currentLatency = estLatency;
       }
 
       const extendedInfo = {
         timings: {
-          fMP: fmpTiming,
-          visuallyReady: visuallyReadyTiming,
-          mainThreadAvail: startTime
+          fMP: fmpTiming.toFixed(2),
+          visuallyReady: visuallyReadyTiming.toFixed(2),
+          mainThreadAvail: startTime.toFixed(2)
         },
         expectedLatencyAtTTI: currentLatency,
         foundLatencies
       };
-      console.log('exendedInfo', extendedInfo);
+      // console.log('exendedInfo', extendedInfo);
 
       return TTIMetric.generateAuditResult({
-        value: startTime,
-        rawValue: startTime,
+        value: startTime.toFixed(2),
+        rawValue: startTime.toFixed(2),
         optimalValue: this.meta.optimalValue,
         extendedInfo
       });
+    }).catch(err => {
+      return generateError(err);
     });
   }
 }
 
 module.exports = TTIMetric;
+
+
+function generateError(err) {
+  return TTIMetric.generateAuditResult({
+    value: -1,
+    rawValue: -1,
+    optimalValue: TTIMetric.meta.optimalValue,
+    debugString: err
+  });
+}

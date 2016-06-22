@@ -12,7 +12,6 @@ const Audit = require('./audit');
 const TracingProcessor = require('../lib/traces/tracing-processor');
 const FMPMetric = require('./first-meaningful-paint');
 
-
 // Parameters (in ms) for log-normal CDF scoring. To see the curve:
 const SCORING_POINT_OF_DIMINISHING_RETURNS = 1700;
 const SCORING_MEDIAN = 5000;
@@ -115,7 +114,7 @@ class TTIMetric extends Audit {
         // Grab this latency and try the threshold again
         currentLatency = estLatency;
       }
-      const timeToInteractive = startTime.toFixed(1)
+      const timeToInteractive = startTime.toFixed(1);
 
       // Use the CDF of a log-normal distribution for scoring.
       //   < 1200ms: score≈100
@@ -154,7 +153,6 @@ class TTIMetric extends Audit {
 }
 
 module.exports = TTIMetric;
-
 
 function generateError(err) {
   return TTIMetric.generateAuditResult({

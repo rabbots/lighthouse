@@ -56,7 +56,8 @@ class EstimatedInputLatency extends Audit {
       const latencyPercentiles = TracingProcessor.getRiskToResponsiveness(model, trace, startTime);
 
       const ninetieth = latencyPercentiles.find(result => result.percentile === 0.9);
-      const rawValue = ninetieth.time.toFixed(1) + 'ms';
+      const rawValue = Number(ninetieth.time.toFixed(1));
+      const displayValue = `${rawValue}ms`;
 
       // Use the CDF of a log-normal distribution for scoring.
       //  10th Percentile ≈ 58ms
@@ -69,9 +70,10 @@ class EstimatedInputLatency extends Audit {
       let score = 100 * distribution.computeComplementaryPercentile(ninetieth.time);
 
       return EstimatedInputLatency.generateAuditResult({
-        value: Math.round(score),
-        optimalValue: this.meta.optimalValue,
+        score: Math.round(score),
+        displayValue,
         rawValue,
+        optimalValue: this.meta.optimalValue,
         extendedInfo: {
           value: latencyPercentiles,
           formatter: Formatter.SUPPORTED_FORMATS.ESTIMATED_INPUT_LATENCY
@@ -79,7 +81,7 @@ class EstimatedInputLatency extends Audit {
       });
     } catch (err) {
       return EstimatedInputLatency.generateAuditResult({
-        value: -1,
+        score: -1,
         debugString: 'Unable to parse trace contents: ' + err.message
       });
     }

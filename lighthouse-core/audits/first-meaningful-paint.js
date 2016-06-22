@@ -128,7 +128,7 @@ class FirstMeaningfulPaint extends Audit {
 
     timings.navStart = data.navStart.ts / 1000;
     return {
-      duration: firstMeaningfulPaint, // `${.toFixed(1)}ms`,
+      duration: `${firstMeaningfulPaint.toFixed(1)}ms`,
       score: Math.round(score),
       extendedInfo: {timings}
     };

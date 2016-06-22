@@ -70,10 +70,9 @@ class EstimatedInputLatency extends Audit {
       let score = 100 * distribution.computeComplementaryPercentile(ninetieth.time);
 
       return EstimatedInputLatency.generateAuditResult({
-        score: Math.round(score),
-        displayValue,
-        rawValue,
+        value: Math.round(score),
         optimalValue: this.meta.optimalValue,
+        rawValue: displayValue,
         extendedInfo: {
           value: latencyPercentiles,
           formatter: Formatter.SUPPORTED_FORMATS.ESTIMATED_INPUT_LATENCY
@@ -81,7 +80,7 @@ class EstimatedInputLatency extends Audit {
       });
     } catch (err) {
       return EstimatedInputLatency.generateAuditResult({
-        score: -1,
+        value: -1,
         debugString: 'Unable to parse trace contents: ' + err.message
       });
     }

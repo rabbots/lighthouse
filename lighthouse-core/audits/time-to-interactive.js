@@ -56,7 +56,7 @@ class TTIMetric extends Audit {
       if (fmpResult.value === -1) {
         return generateError(fmpResult.debugString);
       }
-      const fmpTiming = fmpResult.rawValue;
+      const fmpTiming = parseFloat(fmpResult.rawValue);
       const timings = fmpResult.extendedInfo.timings;
 
       // Process the trace

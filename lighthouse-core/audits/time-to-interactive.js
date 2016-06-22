@@ -12,6 +12,11 @@ const Audit = require('./audit');
 const TracingProcessor = require('../lib/traces/tracing-processor');
 const FMPMetric = require('./first-meaningful-paint');
 
+
+// Parameters (in ms) for log-normal CDF scoring. To see the curve:
+const SCORING_POINT_OF_DIMINISHING_RETURNS = 1700;
+const SCORING_MEDIAN = 5000;
+
 class TTIMetric extends Audit {
   /**
    * @return {!AuditMeta}
@@ -103,19 +108,33 @@ class TTIMetric extends Audit {
           model, artifacts.traceContents, startTime, endTime, [percentile]);
         const estLatency = latencies[0].time.toFixed(2);
         foundLatencies.push(Object.assign({}, {
-          startTime: startTime.toFixed(2),
+          startTime: startTime.toFixed(1),
           estLatency
         }));
         // console.log('At', startTime.toFixed(2), '90 percentile est latency is ~', estLatency);
         // Grab this latency and try the threshold again
         currentLatency = estLatency;
       }
+      const timeToInteractive = startTime.toFixed(1)
+
+      // Use the CDF of a log-normal distribution for scoring.
+      //   < 1200ms: score≈100
+      //   5000ms: score=50
+      //   >= 15000ms: score≈0
+      const distribution = TracingProcessor.getLogNormalDistribution(SCORING_MEDIAN,
+          SCORING_POINT_OF_DIMINISHING_RETURNS);
+      let score = 100 * distribution.computeComplementaryPercentile(timeToInteractive);
+
+      // Clamp the score to 0 <= x <= 100.
+      score = Math.min(100, score);
+      score = Math.max(0, score);
+      score = Math.round(score);
 
       const extendedInfo = {
         timings: {
-          fMP: fmpTiming.toFixed(2),
-          visuallyReady: visuallyReadyTiming.toFixed(2),
-          mainThreadAvail: startTime.toFixed(2)
+          fMP: fmpTiming.toFixed(1),
+          visuallyReady: visuallyReadyTiming.toFixed(1),
+          mainThreadAvail: startTime.toFixed(1)
         },
         expectedLatencyAtTTI: currentLatency,
         foundLatencies
@@ -123,8 +142,8 @@ class TTIMetric extends Audit {
       // console.log('exendedInfo', extendedInfo);
 
       return TTIMetric.generateAuditResult({
-        value: startTime.toFixed(2),
-        rawValue: startTime.toFixed(2),
+        value: score,
+        rawValue: `${timeToInteractive}ms`,
         optimalValue: this.meta.optimalValue,
         extendedInfo
       });

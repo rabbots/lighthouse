@@ -61,7 +61,8 @@ class TTIMetric extends Audit {
         return generateError(fmpResult.debugString);
       }
       const fmpTiming = parseFloat(fmpResult.rawValue);
-      const timings = fmpResult.extendedInfo.timings;
+      const timings = fmpResult.extendedInfo && fmpResult.extendedInfo.value &&
+          fmpResult.extendedInfo.value.timings;
 
       // Process the trace
       const tracingProcessor = new TracingProcessor();

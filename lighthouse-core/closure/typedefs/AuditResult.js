@@ -41,7 +41,6 @@ AuditResultInput.prototype.optimalValue;
 /** @type {(AuditExtendedInfo|undefined|null)} */
 AuditResultInput.prototype.extendedInfo;
 
-
 /**
  * @struct
  * @record
@@ -51,7 +50,7 @@ function AuditExtendedInfo() {}
 /** @type {string} */
 AuditExtendedInfo.prototype.formatter;
 
-/** @type {Object|Array<UserTimingsExtendedInfo>|undefined} */
+/** @type {(Object|Array<UserTimingsExtendedInfo>|FirstMeaningfulPaintExtendedInfo|undefined)} */
 AuditExtendedInfo.prototype.value;
 
 /**
@@ -78,6 +77,38 @@ UserTimingsExtendedInfo.prototype.endTime;
 /** @type {(number|undefined)} */
 UserTimingsExtendedInfo.prototype.duration;
 
+/**
+ * @struct
+ * @record
+ */
+function FirstMeaningfulPaintExtendedInfo() {}
+
+/** @type {!FirstMeaningfulPaintTimings} */
+FirstMeaningfulPaintExtendedInfo.prototype.timings;
+
+/**
+ * @struct
+ * @record
+ */
+function FirstMeaningfulPaintTimings() {}
+
+/** @type {number} */
+FirstMeaningfulPaintTimings.prototype.fCP;
+
+/** @type {number} */
+FirstMeaningfulPaintTimings.prototype.fMPbasic;
+
+/** @type {number} */
+FirstMeaningfulPaintTimings.prototype.fMPpageheight;
+
+/** @type {number} */
+FirstMeaningfulPaintTimings.prototype.fMPwebfont;
+
+/** @type {number} */
+FirstMeaningfulPaintTimings.prototype.fMPfull;
+
+/** @type {number} */
+FirstMeaningfulPaintTimings.prototype.navStart;
 
 /**
  * @struct

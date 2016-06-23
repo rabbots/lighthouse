@@ -19,6 +19,7 @@
 
 const Audit = require('./audit');
 const TracingProcessor = require('../lib/traces/tracing-processor');
+const Formatter = require('../formatters/formatter');
 
 const FAILURE_MESSAGE = 'Navigation and first paint timings not found.';
 
@@ -83,7 +84,10 @@ class FirstMeaningfulPaint extends Audit {
         rawValue: result.duration,
         debugString: result.debugString,
         optimalValue: this.meta.optimalValue,
-        extendedInfo: result.extendedInfo
+        extendedInfo: {
+          value: result.extendedInfo,
+          formatter: Formatter.SUPPORTED_FORMATS.NULL
+        }
       }));
     }).catch(err => {
       // Recover from trace parsing failures.

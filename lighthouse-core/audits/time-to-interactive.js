@@ -80,16 +80,16 @@ class TTIMetric extends Audit {
         };
       });
       const fMPts = timings.fMPfull + timings.navStart;
-      const visuallyReady = visualProgress.find(frame => {
+      const eightyFivePctVC = visualProgress.find(frame => {
         return frame.time >= fMPts && frame.progress >= 85;
       });
-      const visuallyReadyTiming = visuallyReady.time - timings.navStart;
+      const visuallyReadyTiming = eightyFivePctVC.time - timings.navStart;  // TODO CHECK THIS.
 
       // Find first 500ms window where Est Input Latency is <50ms at the 90% percentile.
       let startTime = Math.max(fmpTiming, visuallyReadyTiming) - 50;
       let endTime;
       let currentLatency = Infinity;
-      const percentile = 0.9;
+      const percentiles = [0.75, 0.9, 0.99, 1];
       const threshold = 50;
       let foundLatencies = [];
 
@@ -105,15 +105,21 @@ class TTIMetric extends Audit {
         }
         // Get our expected latency for the time window
         const latencies = TracingProcessor.getRiskToResponsiveness(
-          model, artifacts.traceContents, startTime, endTime, [percentile]);
+          model, artifacts.traceContents, startTime, endTime, percentiles);
         const estLatency = latencies[0].time.toFixed(2);
         foundLatencies.push(Object.assign({}, {
           startTime: startTime.toFixed(1),
           estLatency
         }));
-        // console.log('At', startTime.toFixed(2), '90 percentile est latency is ~', estLatency);
+          console.log('At', startTime.toFixed(2),
+            '75 % latency is ~', latencies[0].time.toFixed(2),
+            ', 90 % latency is ~', latencies[1].time.toFixed(2),
+            ', 99 % latency is ~', latencies[2].time.toFixed(2),
+            ', 100 % latency is ~', latencies[3].time.toFixed(2)
+            );
         // Grab this latency and try the threshold again
         currentLatency = estLatency;
+        return;
       }
       const timeToInteractive = startTime.toFixed(1);
 

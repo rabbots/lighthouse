@@ -196,13 +196,23 @@ class TraceProcessor {
     const durations = [];
     mainThread.sliceGroup.topLevelSlices.forEach(slice => {
       // Discard slices outside range.
+
       if (slice.end <= startTime || slice.start >= endTime) {
         return;
       }
+      console.log(slice.title)
 
-      durations.push(slice.duration);
+      let duration = slice.duration;
+      if (slice.start < startTime) {
+        // console.log(duration, startTime - slice.start);
+        // duration -= (startTime - slice.start);
+      }
+
+      durations.push(duration);
     });
     durations.sort((a, b) => a - b);
+    // console.log(durations)
+    // console.log()
 
     // Actual calculation of percentiles done in _riskPercentiles.
     return TraceProcessor._riskPercentiles(durations, totalTime, percentiles);

@@ -25,6 +25,14 @@
     ]
   },
   {
+    "trace": true,
+    "loadPage": true,
+    "loadDataName": "scrolling",
+    "gatherers": [
+      "scrolling"
+    ]
+  },
+  {
     "loadPage": true,
     "gatherers": [
       "http-redirect",
@@ -61,6 +69,7 @@
     "color-contrast",
     "image-alt",
     "label",
+    "smooth-scrolling",
     "tabindex"
   ],
 
@@ -317,6 +326,10 @@
         },
         "user-timings": {
           "value": 0,
+          "weight": 1
+        },
+        "smooth-scrolling": {
+          "value": 60,
           "weight": 1
         }
       }

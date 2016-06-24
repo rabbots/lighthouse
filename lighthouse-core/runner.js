@@ -79,7 +79,6 @@ class Runner {
               throw new Error(`Unable to locate gatherer: ${gatherer}`);
             }
           });
-
           return pass;
         })
 

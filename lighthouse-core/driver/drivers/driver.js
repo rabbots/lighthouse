@@ -46,6 +46,9 @@ class DriverBase {
       'blink.user_timing',
       'benchmark',
       'devtools.timeline',
+      'navigation',
+      'input',
+      'latencyInfo',
       'disabled-by-default-blink.debug.layout',
       'disabled-by-default-devtools.timeline',
       'disabled-by-default-devtools.timeline.frame',
@@ -352,4 +355,3 @@ class DriverBase {
 }
 
 module.exports = DriverBase;
-

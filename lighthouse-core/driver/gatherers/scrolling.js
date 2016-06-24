@@ -23,7 +23,6 @@ const Gather = require('./gather');
 
 function scrollPage(){
   const distance = document.body.offsetHeight - window.innerHeight;
-  alert(distance);
   chrome.gpuBenchmarking.smoothScrollBy(distance, __returnResults);
 }
 

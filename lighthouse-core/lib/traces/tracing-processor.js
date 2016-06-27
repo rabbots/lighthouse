@@ -200,15 +200,8 @@ class TraceProcessor {
       if (slice.end <= startTime || slice.start >= endTime) {
         return;
       }
-      console.log(slice.title)
 
-      let duration = slice.duration;
-      if (slice.start < startTime) {
-        // console.log(duration, startTime - slice.start);
-        // duration -= (startTime - slice.start);
-      }
-
-      durations.push(duration);
+      durations.push(slice.duration);
     });
     durations.sort((a, b) => a - b);
     // console.log(durations)

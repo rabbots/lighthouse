@@ -89,7 +89,7 @@ class TTIMetric extends Audit {
       let startTime = Math.max(fmpTiming, visuallyReadyTiming) - 50;
       let endTime;
       let currentLatency = Infinity;
-      const percentiles = [0.75, 0.9, 0.99, 1];
+      const percentiles = [0.9]; //[0.75, 0.9, 0.99, 1];
       const threshold = 50;
       let foundLatencies = [];
 
@@ -111,12 +111,12 @@ class TTIMetric extends Audit {
           startTime: startTime.toFixed(1),
           estLatency
         }));
-          console.log('At', startTime.toFixed(2),
-            '75 % latency is ~', latencies[0].time.toFixed(2),
-            ', 90 % latency is ~', latencies[1].time.toFixed(2),
-            ', 99 % latency is ~', latencies[2].time.toFixed(2),
-            ', 100 % latency is ~', latencies[3].time.toFixed(2)
-            );
+          // console.log('At', startTime.toFixed(2),
+          //   '75 % latency is ~', latencies[0].time.toFixed(2),
+          //   ', 90 % latency is ~', latencies[1].time.toFixed(2),
+          //   ', 99 % latency is ~', latencies[2].time.toFixed(2),
+          //   ', 100 % latency is ~', latencies[3].time.toFixed(2)
+          //   );
         // Grab this latency and try the threshold again
         currentLatency = estLatency;
         return;

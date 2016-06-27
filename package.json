@@ -1,6 +1,6 @@
 {
   "name": "lighthouse",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Lighthouse",
   "main": "./lighthouse-core/module/index.js",
   "bin": "./lighthouse-cli/index.js",
@@ -39,7 +39,7 @@
     "coveralls": "^2.11.9"
   },
   "dependencies": {
-    "meow": "^3.7.0"
+    "yargs": "3.30.0"
   },
   "repository": "googlechrome/lighthouse",
   "keywords": [

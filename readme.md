@@ -79,7 +79,7 @@ npm run unit
 
 ## Chrome Extension
 
-The same audits are run against from a Chrome extension. See [./extension](https://github.com/GoogleChrome/lighthouse/tree/master/extension).
+The same audits are run against from a Chrome extension. See [./extension](https://github.com/GoogleChrome/lighthouse/tree/master/lighthouse-extension).
 
 
 ## Architecture
@@ -94,6 +94,11 @@ _Some incomplete notes_
 * **Metrics** - Performance metrics summarizing the UX
 * **Diagnoses** - The perf problems that affect those metrics
 * **Aggregators** - Pulling audit results, grouping into user-facing components (eg. `install_to_homescreen`) and applying weighting and overall scoring.
+
+##### Internal module graph
+![graph of lighthouse-core module dependencies](https://cloud.githubusercontent.com/assets/39191/16317303/54a25e20-3982-11e6-9374-dd3c24b70468.png)
+<small><code>npm install -g js-vd; vd --exclude "node_modules|third_party" lighthouse-core/ > graph.html</code></small>
+
 
 ### Protocol
 

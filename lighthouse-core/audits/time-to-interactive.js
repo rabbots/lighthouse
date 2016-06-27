@@ -73,13 +73,15 @@ class TTIMetric extends Audit {
       // TODO: Wait for DOMContentLoadedEndEvent
       // TODO: Wait for UA loading indicator to be done
 
+      // TODO CHECK these units are the same
       const fMPts = timings.fMPfull + timings.navStart;
 
       // look at speedline results for 85% starting at FMP
       const eightyFivePctVC = artifacts.Speedline.frames.find(frame => {
         return frame.getTimeStamp() >= fMPts && frame.getProgress() >= 85;
       });
-      const visuallyReadyTiming = eightyFivePctVC.time - timings.navStart;  // TODO CHECK THIS.
+      // TODO CHECK these units are the same
+      const visuallyReadyTiming = eightyFivePctVC.getTimeStamp() - timings.navStart;
 
       // Find first 500ms window where Est Input Latency is <50ms at the 90% percentile.
       let startTime = Math.max(fmpTiming, visuallyReadyTiming) - 50;
@@ -114,7 +116,6 @@ class TTIMetric extends Audit {
           //   );
         // Grab this latency and try the threshold again
         currentLatency = estLatency;
-        return;
       }
       const timeToInteractive = startTime.toFixed(1);
 

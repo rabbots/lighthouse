@@ -87,7 +87,7 @@ class TTIMetric extends Audit {
       let startTime = Math.max(fmpTiming, visuallyReadyTiming) - 50;
       let endTime;
       let currentLatency = Infinity;
-      const percentiles = [0.9]; //[0.75, 0.9, 0.99, 1];
+      const percentiles = [0.9]; // [0.75, 0.9, 0.99, 1];
       const threshold = 50;
       let foundLatencies = [];
 

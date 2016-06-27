@@ -13,6 +13,7 @@ const TracingProcessor = require('../lib/traces/tracing-processor');
 const FMPMetric = require('./first-meaningful-paint');
 
 // Parameters (in ms) for log-normal CDF scoring. To see the curve:
+//   https://www.desmos.com/calculator/jlrx14q4w8
 const SCORING_POINT_OF_DIMINISHING_RETURNS = 1700;
 const SCORING_MEDIAN = 5000;
 
@@ -25,7 +26,7 @@ class TTIMetric extends Audit {
       category: 'Performance',
       name: 'time-to-interactive',
       description: 'Time To Interactive',
-      optimalValue: 'TBD', // dunno what the scoring curve is yet...
+      optimalValue: SCORING_POINT_OF_DIMINISHING_RETURNS.toLocaleString(),
       requiredArtifacts: ['traceContents', 'speedline']
     };
   }
@@ -72,16 +73,11 @@ class TTIMetric extends Audit {
       // TODO: Wait for DOMContentLoadedEndEvent
       // TODO: Wait for UA loading indicator to be done
 
-      // look at speedline results for 85% starting at FMP
-      const visualProgress = artifacts.Speedline.frames.map(frame => {
-        return {
-          progress: frame.getProgress(),
-          time: frame.getTimeStamp()
-        };
-      });
       const fMPts = timings.fMPfull + timings.navStart;
-      const eightyFivePctVC = visualProgress.find(frame => {
-        return frame.time >= fMPts && frame.progress >= 85;
+
+      // look at speedline results for 85% starting at FMP
+      const eightyFivePctVC = artifacts.Speedline.frames.find(frame => {
+        return frame.getTimeStamp() >= fMPts && frame.getProgress() >= 85;
       });
       const visuallyReadyTiming = eightyFivePctVC.time - timings.navStart;  // TODO CHECK THIS.
 
@@ -99,18 +95,17 @@ class TTIMetric extends Audit {
         startTime += 50;
         endTime = startTime + 500;
         // If there's no more room in the trace to look, we're done.
-        // TODO return an error instead
         if (endTime > endOfTraceTime) {
-          return;
+          return generateError('Entire trace was found to be busy.');
         }
         // Get our expected latency for the time window
         const latencies = TracingProcessor.getRiskToResponsiveness(
           model, artifacts.traceContents, startTime, endTime, percentiles);
         const estLatency = latencies[0].time.toFixed(2);
-        foundLatencies.push(Object.assign({}, {
-          startTime: startTime.toFixed(1),
-          estLatency
-        }));
+        foundLatencies.push({
+          estLatency: estLatency,
+          startTime: startTime.toFixed(1)
+        });
           // console.log('At', startTime.toFixed(2),
           //   '75 % latency is ~', latencies[0].time.toFixed(2),
           //   ', 90 % latency is ~', latencies[1].time.toFixed(2),
@@ -145,7 +140,7 @@ class TTIMetric extends Audit {
         expectedLatencyAtTTI: currentLatency,
         foundLatencies
       };
-      // console.log('exendedInfo', extendedInfo);
+      // console.log('TTI exendedInfo', extendedInfo);
 
       return TTIMetric.generateAuditResult({
         value: score,

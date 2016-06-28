@@ -23,12 +23,12 @@ const traceContents = require('../fixtures/traces/trace-user-timings.json');
 
 describe('Performance: user-timings audit', () => {
   it('fails gracefully', () => {
-    const output = Audit.audit({});
+    const output = Audit.audit({traces: {}});
     assert.equal(output.value, -1);
   });
 
   it('evaluates valid input correctly', () => {
-    const output = Audit.audit({firstPass: {traceContents}});
+    const output = Audit.audit({traces: {firstPass: {traceContents}}});
     assert.equal(output.value, 2);
     assert.ok(!Number.isNaN(output.extendedInfo.value[0].startTime));
     assert.ok(typeof output.extendedInfo.value[0].endTime === 'undefined');

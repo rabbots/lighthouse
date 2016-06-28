@@ -128,7 +128,8 @@ class UserTimings extends Audit {
    * @return {!AuditResult}
    */
   static audit(artifacts) {
-    const traceContents = artifacts[TRACE_NAME] && artifacts[TRACE_NAME].traceContents;
+    const traceContents =
+      artifacts.traces[TRACE_NAME] && artifacts.traces[TRACE_NAME].traceContents;
     if (!traceContents || !Array.isArray(traceContents)) {
       return UserTimings.generateAuditResult({
         value: -1,

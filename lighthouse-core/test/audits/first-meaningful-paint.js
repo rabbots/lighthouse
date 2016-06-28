@@ -37,7 +37,7 @@ describe('Performance: first-meaningful-paint audit', () => {
 
     it('processes a valid trace file', () => {
       const traceData = require('../fixtures/traces/progressive-app.json');
-      return Audit.audit({traceContents: traceData}).then(response => {
+      return Audit.audit({firstPass: {traceContents: traceData}}).then(response => {
         fmpResult = response;
       });
     });

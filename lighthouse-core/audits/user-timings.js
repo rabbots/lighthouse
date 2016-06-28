@@ -22,6 +22,7 @@ const Formatter = require('../formatters/formatter');
 const TimelineModel = require('../lib/traces/devtools-timeline-model');
 
 const FAILURE_MESSAGE = 'Trace data not found.';
+const TRACE_NAME = 'firstPass';
 
 /**
  * @param {!Array<!Object>} traceData
@@ -127,14 +128,15 @@ class UserTimings extends Audit {
    * @return {!AuditResult}
    */
   static audit(artifacts) {
-    if (!artifacts.traceContents || !Array.isArray(artifacts.traceContents)) {
+    const traceContents = artifacts[TRACE_NAME] && artifacts[TRACE_NAME].traceContents;
+    if (!traceContents || !Array.isArray(traceContents)) {
       return UserTimings.generateAuditResult({
         value: -1,
         debugString: FAILURE_MESSAGE
       });
     }
 
-    const userTimings = filterTrace(artifacts.traceContents);
+    const userTimings = filterTrace(traceContents);
 
     return UserTimings.generateAuditResult({
       value: userTimings.length,

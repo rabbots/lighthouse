@@ -46,10 +46,10 @@ describe('Performance: time-to-interactive audit', () => {
         assert.equal(output.rawValue, '1105.8ms');
         assert.equal(output.value, 100);
 
-        assert.equal(output.extendedInfo.expectedLatencyAtTTI, '21.67');
-        assert.equal(output.extendedInfo.timings.fMP, '1099.5');
-        assert.equal(output.extendedInfo.timings.mainThreadAvail, '1105.8');
-        assert.equal(output.extendedInfo.timings.visuallyReady, '1105.8');
+        assert.equal(output.extendedInfo.value.expectedLatencyAtTTI, '21.67');
+        assert.equal(output.extendedInfo.value.timings.fMP, '1099.5');
+        assert.equal(output.extendedInfo.value.timings.mainThreadAvail, '1105.8');
+        assert.equal(output.extendedInfo.value.timings.visuallyReady, '1105.8');
       });
     });
   });

@@ -24,15 +24,15 @@ describe('CLI Tests', function() {
   it('should list all audits and exit immediately after', () => {
     const output = JSON.parse(childProcess.execSync(
           'node lighthouse-cli/index.js https://example.com --list-all-audits').toString());
-    assert(Array.isArray(output.audits));
-    assert(output.audits.length > 0);
+    assert.ok(Array.isArray(output.audits));
+    assert.ok(output.audits.length > 0);
   });
 
   it('should print trace categories list-trace-categories flag and exit immediately after', () => {
     const output = JSON.parse(childProcess.execSync(
           'node lighthouse-cli/index.js https://example.com --list-trace-categories').toString());
-    assert(Array.isArray(output.traceCategories));
-    assert(output.traceCategories.length > 0);
+    assert.ok(Array.isArray(output.traceCategories));
+    assert.ok(output.traceCategories.length > 0);
   });
 });
 

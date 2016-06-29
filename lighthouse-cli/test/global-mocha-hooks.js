@@ -30,7 +30,6 @@ beforeEach(function() {
   currTest._assertions = currTest._assertions || 0;
 });
 
-
 afterEach(function() {
   if (currTest._assertions === 0) {
     throw new Error(`ZERO assertions in test: "${currTest.title}"\n${currTest.file}`);
